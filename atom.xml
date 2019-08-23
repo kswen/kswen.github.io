@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kswen.github.io</id>
-    <title>Gridea</title>
-    <updated>2019-08-23T13:02:50.565Z</updated>
+    <title>A little bit</title>
+    <updated>2019-08-23T13:16:05.787Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kswen.github.io"/>
     <link rel="self" href="https://kswen.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>https://kswen.github.io/images/avatar.png</logo>
     <icon>https://kswen.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, Gridea</rights>
+    <rights>All rights reserved 2019, A little bit</rights>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
         <id>https://kswen.github.io/post/hello-gridea</id>
