@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566735688550">
+<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566735838773">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kswen.github.io">
-        <img src="https://kswen.github.io/images/avatar.png?v=1566735688550" class="site-logo">
+        <img src="https://kswen.github.io/images/avatar.png?v=1566735838773" class="site-logo">
         <h1 class="site-title">a little bit</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -101,6 +101,7 @@
             <div class="post-content">
               <h2 id="背景">背景</h2>
 <p>公司有大部分开发人员缺乏去积极学习新技术新知识的行动, 甚至于就算给他们培训, 他们也懒得听或者觉得自己什么都懂. 所以考虑到当前团队和公司规模的一些因素，在系统架构升级过程中选择了一种折中的方案，兼顾上下，找到需求与技术的平衡点。</p>
+<!-- more -->
 <p>以我们的经验分析，tomcat服务下会部署一个或多个Web项目，具体看项目需求。一个项目中会混杂着各种功能模块的实现，每个功能模块的实现升级或bug修复都涉及到服务重启，虽然有nginx作为前置代理，但多少还是影响到客户的体验，而且一不小心重大bug全线崩盘...😂</p>
 <p>Spring boot的出现给我们带来开发的便利点. 开始一个新的项目模块无需再去搞半天配置, 然后才开始写自己的业务逻辑. 只需打开<a href="https://start.spring.io/">Spring Initializr</a>, 简单的点几下, 打开IDE就可以直接干活了. Springboot自带嵌入Tomcat的方式也是极其重要的一个功能点, 打包jar直接运行,** Make jar not war**. 直接上SpringCloud那套团队要掌握的知识点太多, 如果只是去掌握Springboot这套开发框架的话学习成本要低得多, 可以说是对传统开发思维模式基本没有什么影响. 大概就这么个背景促成了这个选择, 下面简单描述一下架构逻辑, 大概了解之后再决定要不要继续读下去, 避免浪费你的时间.</p>
 <h2 id="架构逻辑概览">架构逻辑概览</h2>
