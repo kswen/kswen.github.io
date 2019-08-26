@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566788033473">
+<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566792383797">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kswen.github.io">
-        <img src="https://kswen.github.io/images/avatar.png?v=1566788033473" class="site-logo">
+        <img src="https://kswen.github.io/images/avatar.png?v=1566792383797" class="site-logo">
         <h1 class="site-title">a little bit</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -132,7 +132,294 @@
 <p>一个实例的服务以REST API的方式在多个服务之间共享, 但是实际并没有服务注册中心, 那么当部署多个服务实例的时候或者服务发布的时候怎么去保证服务的可用? 这个问题可以在<a href="https://konghq.com/">Kong</a>这个报网关里很好的解决. 关于Kong的介绍这里就不啰嗦, 官方文档很完美, 直接去官网看.  如果你使用或了解过Nginx, 看看这个图就明白了.<br>
 <img src="https://kswen.github.io/post-images/1566787847453.png" alt=""></p>
 <h2 id="实际行动">实际行动</h2>
-<p>说归说, 实际还得行动起来才知道行不行. 下面从0开始以我们实际情况来做个demo.</p>
+<p>说归说, 实际还得行动起来才知道行不行.  这套结构里面可灵活变通的东西很多, 不方便一一解释描述, 下面从0开始以我们实际情况来做个demo.</p>
+<h3 id="网络规划">网络规划</h3>
+<p>既然云服务器是如此的流行, 那我们就以云服务器来实现, 实际自己去租IDC机柜部署也是大同小异.  所有服务器都在一个VPC下, 一共4台ECS, 网关服务器绑定弹性公网IP, 开放https服务.</p>
+<h4 id="一台网关服务器">一台网关服务器</h4>
+<p>Kong服务安装在这台上面, Kong的安装请参考官方文档, 入口防火墙开放443端口服务.<br>
+IP地址配置: 192.168.0.1 .</p>
+<h4 id="一台web服务器">一台WEB服务器</h4>
+<p>用于部署前端服务, 没什么实际业务操作,  主要是为了方便扩展和业务数据安全隔离, WEB服务可能会请求到后端的多个Service服务, 聚合返回所需数据模型.<br>
+IP地址配置: 192.168.0.10</p>
+<h4 id="一台service服务器">一台Service服务器</h4>
+<p>用于部署Service服务, 数据加解密, 业务逻辑处理集中在这里, 数据库基本上就只充当数据存储的功能, 没有Function, procedure这些.<br>
+IP地址配置: 192.168.0.20</p>
+<h4 id="一台数据库服务器">一台数据库服务器</h4>
+<p>这个没什么特别的, 就是数据存储, 满足CRUD, 根据业务规模做好规划.<br>
+IP地址配置: 192.168.0.60</p>
+<h3 id="服务发布">服务发布</h3>
+<p>把原来仅有的6个服务拆分成多个, 拆分后前后端服务加起来有30＋, 这么多个服务还要多个实例部署, 手工操作肯定是不太现实的. 所以Jenkins持续构建就显得十分的重要.</p>
+<h4 id="jenkins管道发布的创建">Jenkins管道发布的创建</h4>
+<p>以前想在Jenkins实现自动发布一整套, 需要需要插件的配合, 先Jenkins有了pipeline的支持, 新建一个Job和Jenkins的交互配置减少了基本上一步完成, 剩余的都集中再Jenkinsfile的编写上. 关于Jenkinsfile脚本的编写, 请参考官方的<a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/">Jenkinsfile文档</a></p>
+<p>Jenkinsfile的里支持Groovy基本, 这很受程序猿的欢迎, 只要可以写代码, 有什么不可能的, O(∩_∩)O~. 这里定义不同的阶段去实现所需的操作, 通过Blue Ocean UI可以很直观的看到整个构建的过程. e.g.<br>
+<img src="https://kswen.github.io/post-images/1566790906222.png" alt="构建过程直观展现"></p>
+<h4 id="jenkinsfile关键步骤">Jenkinsfile关键步骤</h4>
+<p>在编写构建脚本文件时需要实现以下几个功能点:</p>
+<ol>
+<li>服务构建之前需要先构建相应的组件(jar或者配置文件之类的), 组件直接优先关系也要定义清楚.</li>
+<li>服务多实例部署在同一台机子上需要的端口定义.</li>
+<li>服务发布模式: 滚动/金丝雀(先定义在基本里, 构建时根据用户选择执行)</li>
+<li>服务发布前先将当前待替换的服务状态设置为服务不可用(http状态码503)</li>
+<li>服务实例发布完成, 将该实例服务状态设置为可用(http状态码200)</li>
+<li>当前实例成功发布, 继续下一个实例发布, 失败根据策略回滚, 者停止或恢复到指定版本.</li>
+</ol>
+<p>Jenkinsfile 样例:</p>
+<pre><code>pipeline {
+    agent any
+    
+    parameters {
+     	string(name: 'LAST_SUCC_VERSION', defaultValue: 'X', description: '请输入上一个正确发布的版本(上一个build里的Revision: xxxxx)，选择【滚动发布】此项无效')
+        choice(name: 'REQUESTED_NODE_ACTION', choices: ['2','4','6','8','10'], description: '请选择应用部署节点个数')
+        choice(name: 'DEPLOY_STRATEGY', choices: ['RollingUpdate','Canary'], description: '请选择应用部署策略：\n RollingUpdate: 滚动(🔁)发布, 中途不会暂停。\n Canary: 金丝雀(🐦)发布, 中途需要人工干预。')
+    }
+    
+    environment { 
+        def M2_HOME = '/opt/devops/apps/maven/bin'
+        
+        def R_SSH_PORT = '22'
+        
+        def DEPLOY_NAME = 'mars-1.0.0.jar'
+        
+        def WEB_NODE_01 = 'rock-gateway-node-01'
+        
+        def WEB_NODE_02 = 'rock-gateway-node-02'
+        
+        def BUNDLE_PATH = '/opt/boot-cls/bundle'
+        
+        def BIN_PATH = '/opt/boot-cls/bin'
+    }
+    
+    stages {
+    	stage('Strategy') {
+            steps {
+                echo &quot;...Deploy ${params.REQUESTED_NODE_ACTION} Nodes Service With ${params.DEPLOY_STRATEGY} Strategy...&quot;;
+                script{
+                	if('Canary' == params.DEPLOY_STRATEGY){
+                		echo &quot;...Recovery standby version is ${params.LAST_SUCC_VERSION}...&quot;;
+                	}
+                }
+        	}
+        }
+        stage('PreBuild') {
+            steps {
+                echo '...Building Env Prepare...'
+                build job: 'config-files', propagate: true
+            }
+        }
+        stage('rock-sextans') {
+            steps {
+                echo '...Building IPay-Sextans...'
+                build job: 'rock-sextans', propagate: true
+            }
+        }
+        stage('Build') {
+            steps {
+                echo '...Building...'
+                sh '${M2_HOME}/mvn clean install -U -Ppro'
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+            }
+        }
+        stage('Unit Tests') {
+            steps {
+                echo '...Unit Testing..'
+            }
+        }
+        stage ('Deployment') {
+        	steps {
+        		script{
+    				def deployNodes = ['10010', '10011', '10012', '10013', '10014', '10015', '10016', '10017', '10018', '10019']
+    				def serviceName = &quot;mars&quot;
+    				def nodeNumbers = params.REQUESTED_NODE_ACTION as Integer;
+    				
+    				echo &quot;...${nodeNumbers} Nodes to deploy&quot;
+    				
+    				if(nodeNumbers&gt;10){
+    					error &quot;...Can not perform deploy action, root cause: exceed max node support&quot;
+						currentBuild.result = 'FAILURE'
+						sh &quot;exit 1&quot;
+    				}
+    				
+                    for (int i = 0; i &lt; nodeNumbers; ++i) {
+                    	
+                    	showStartBuildMsg(&quot;${deployNodes[i]}&quot;);
+                    	
+                    	echo &quot;...Set ${serviceName}-${deployNodes[i]} service status to 503&quot;
+                    	setNodeStatus(&quot;${WEB_NODE_01}&quot;, &quot;${deployNodes[i]}&quot;, &quot;${serviceName}&quot;)
+                    	
+                        echo &quot;...Deploying ${DEPLOY_NAME} on node ${WEB_NODE_01} use port ${deployNodes[i]}&quot;
+                        deploy2Node(&quot;${WEB_NODE_01}&quot;,&quot;${serviceName}-${deployNodes[i]}-deploy.sh&quot;)
+                        
+                        echo &quot;...Check boot status&quot;
+	                	bootStatus(&quot;${WEB_NODE_01}&quot;, &quot;${deployNodes[i]}&quot;, &quot;${serviceName}&quot;)
+	                	
+	                	echo &quot;...Check myStatus&quot;
+	                	e2eStatus(&quot;${WEB_NODE_01}&quot;, &quot;${deployNodes[i]}&quot;, &quot;${serviceName}&quot;)
+	                	
+	                	showDeployStatus(&quot;${deployNodes[i]}&quot;, &quot;${serviceName}&quot;);
+	                	
+	                	echo &quot;...Deploying ${DEPLOY_NAME} on standby node ${WEB_NODE_02} with port ${deployNodes[i]}&quot;
+                        deploy2StandByNode(&quot;${WEB_NODE_02}&quot;,&quot;${serviceName}-${deployNodes[i]}-standby.sh&quot;)
+	                	
+	                	showStandByNodeStatus(&quot;${WEB_NODE_02}&quot;, &quot;${deployNodes[i]}&quot;, &quot;${serviceName}&quot;);
+	                	
+	                	if('Canary' == params.DEPLOY_STRATEGY &amp;&amp; i &lt; nodeNumbers-1){
+	                		
+	                		def decisionDesc = '0- 继续部署下一个节点服务;  1-停止部署操作，并停止当前已部署节点服务;  终止（Abort）操作不会停止已经部署完成的节点服务';
+	                		def optionsList = ['0','1'];
+	                	
+	                		if('X' != params.LAST_SUCC_VERSION){
+	                			
+	                			decisionDesc = '0- 继续部署下一个节点服务;  1-停止部署操作，并停止当前已部署节点服务; 2-恢复到正确版本: '+params.LAST_SUCC_VERSION+'; 终止（Abort）操作不会停止已经部署完成的节点服务';
+	                			optionsList = ['0','1','2'];
+	                		}
+	                	
+	                		def userChoice = input(ok:'确认', message: '请选择继续下一步操作?', parameters: [choice(name: 'MAKE_A_DECISION', choices: optionsList, description: decisionDesc)]);
+			
+				            if('1' == userChoice){
+				            	
+				            	stopMsg(&quot;${deployNodes[i]}&quot;)
+				            	stopNodeService(&quot;${WEB_NODE_01}&quot;,&quot;${serviceName}-${deployNodes[i]}-ctr.sh&quot;)
+				            	echo &quot;.......Stop current deployed version completed.........&quot;
+				            	
+			            		echo &quot;.......The build mission terminated🛑 by user.........&quot;
+				            	currentBuild.result = 'FAILURE'
+								sh &quot;exit 1&quot;
+				            }
+				            
+				            if('2' == userChoice){
+				            	
+				            	stopMsg(&quot;${deployNodes[i]}&quot;)
+				            	stopNodeService(&quot;${WEB_NODE_01}&quot;,&quot;${serviceName}-${deployNodes[i]}-ctr.sh&quot;)
+			            		echo &quot;.......Stop current deployed version completed.........&quot;
+			            		
+			            		recoverMsg(params.LAST_SUCC_VERSION)
+			            		recoverNodeService(&quot;${WEB_NODE_01}&quot;,&quot;${serviceName}-${deployNodes[i]}-recover.sh&quot;, params.LAST_SUCC_VERSION)
+			            		echo &quot;.......Recover to version &quot;+params.LAST_SUCC_VERSION+&quot; mission accomplished.........&quot;
+			            		
+				            	currentBuild.result = 'FAILURE'
+								sh &quot;exit 1&quot;
+				            }
+	                	}
+                    }
+                }
+            }
+        }
+        stage(&quot;Completion&quot;){
+        	steps {
+        		echo &quot;⭐⭐⭐⭐⭐ Mission complete, everything goes smoothly⭐⭐⭐⭐⭐&quot;
+        	}
+        }
+    }
+}
+
+def showStartBuildMsg(nodePort){
+	stage('Deploying '+ nodePort) {
+		echo &quot;...Deploying ${nodePort} Node Service&quot;
+	}
+}
+
+def stopMsg(nodePort){
+	stage('Stop '+ nodePort) {
+		echo &quot;...Stop ${nodePort} Node Service&quot;
+	}
+}
+
+def recoverMsg(lastSuccssVersion){
+	stage('Recover v'+ lastSuccssVersion) {
+		echo &quot;...Recover v${lastSuccssVersion} Node Service&quot;
+	}
+}
+
+def stopNodeService(nodeName, ctrScript){
+	
+	sh &quot;ssh -p$R_SSH_PORT devops@${nodeName} sh ${BIN_PATH}/${ctrScript} stop&quot;
+	sleep time: 1, unit: 'SECONDS'
+}
+
+def showDeployStatus(nodePort, serviceName){
+
+	stage(nodePort+' Deployed') {
+		echo &quot;...${serviceName}-${nodePort} Deployed successfully...🐸&quot;
+	}
+}
+
+def recoverNodeService(nodeName, recoveryScript, lastSuccVersion){
+	
+    sh &quot;ssh -p$R_SSH_PORT devops@${nodeName} sh ${BUNDLE_PATH}/${recoveryScript} recovery ${lastSuccVersion}&quot;
+	sleep time: 35, unit: 'SECONDS'
+}
+
+def deploy2StandByNode(nodeName, standbyScript){
+	
+    sh &quot;ssh -p$R_SSH_PORT devops@${nodeName} sh ${BUNDLE_PATH}/${standbyScript} standby&quot;
+	sleep time: 15, unit: 'SECONDS'
+}
+
+def showStandByNodeStatus(nodeName, nodePort, serviceName){
+
+	stage(nodeName+' StandBy') {
+		echo &quot;...${serviceName}-${nodePort} StandBy Deployed successfully...🐸&quot;
+	}
+}
+
+def setNodeStatus(nodeName, nodePort, serviceName){
+	
+	try{
+	    HEALTH_STATUS = sh(returnStdout: true, script: &quot;curl -s \&quot;http://${nodeName}:${nodePort}/${serviceName}/actuator/health\&quot; | jq -r \&quot;.status\&quot;&quot;).trim()
+		if (HEALTH_STATUS != 'DOWN') {
+			sh &quot;curl -s \&quot;http://${nodeName}:${nodePort}/${serviceName}/outOfService?key=IAMSURE\&quot;&quot;
+			sleep time: 35, unit: 'SECONDS'
+		}
+		
+		HEALTH_STATUS = sh(returnStdout: true, script: &quot;curl -s \&quot;http://${nodeName}:${nodePort}/${serviceName}/actuator/health\&quot; | jq -r \&quot;.status\&quot;&quot;).trim()
+	    if (HEALTH_STATUS != 'DOWN') {
+			error &quot;Set ${serviceName}-${nodePort} status failed: ${HEALTH_STATUS}&quot;
+			currentBuild.result = 'FAILURE'
+			sh &quot;exit 1&quot;
+		}else{
+			echo &quot;...Set ${serviceName}-${nodePort} status to 503 successfully&quot;
+		}
+		sleep time: 35, unit: 'SECONDS'
+	}catch(exc){
+		echo &quot;...${serviceName}-${nodePort} not start yet: &quot; + exc.toString()
+	}
+}
+
+def deploy2Node(nodeName, deployScript){
+	
+    sh &quot;ssh -p$R_SSH_PORT devops@${nodeName} sh ${BUNDLE_PATH}/${deployScript} deploy&quot;
+	sleep time: 35, unit: 'SECONDS'
+}
+
+def bootStatus(nodeName, nodePort, serviceName){
+
+	stage('Boot '+nodePort) {
+		HEALTH_STATUS = sh(returnStdout: true, script: &quot;curl -s \&quot;http://${nodeName}:${nodePort}/${serviceName}/actuator/health\&quot; | jq -r \&quot;.status\&quot;&quot;).trim()
+	    if (HEALTH_STATUS != 'UP') {
+			error &quot;🐞 ${serviceName}-${nodePort} boot status is ${HEALTH_STATUS}&quot;
+			currentBuild.result = 'FAILURE'
+			sh &quot;exit 1&quot;
+		}else{
+			echo &quot;...${serviceName}-${nodePort} boot status UP🐸&quot;
+		}
+	}
+}
+
+def e2eStatus(nodeName, nodePort, serviceName){
+
+	stage('E2E '+nodePort) {
+		HEALTH_STATUS = sh(returnStdout: true, script: &quot;curl -s http://${nodeName}:${nodePort}/${serviceName}/myStatus&quot;).trim()
+	    if (HEALTH_STATUS != 'UP') {
+			error &quot;🐞 ${serviceName}-${nodePort} E2E status is ${HEALTH_STATUS}&quot;
+			currentBuild.result = 'FAILURE'
+			sh &quot;exit 1&quot;
+		}else{
+			echo &quot;...${serviceName}-${nodePort} E2E status UP🐸&quot;
+		}
+	}
+}
+</code></pre>
+<p>具体情况根据实际情况来.</p>
 <blockquote>
 <p>各种架构服务流行的今天, 不管是框架也好架构也罢, 选择适合自己的才是最好的.</p>
 </blockquote>
