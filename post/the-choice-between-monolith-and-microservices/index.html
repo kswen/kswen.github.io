@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566792383797">
+<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566794538948">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kswen.github.io">
-        <img src="https://kswen.github.io/images/avatar.png?v=1566792383797" class="site-logo">
+        <img src="https://kswen.github.io/images/avatar.png?v=1566794538948" class="site-logo">
         <h1 class="site-title">a little bit</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -420,6 +420,11 @@ def e2eStatus(nodeName, nodePort, serviceName){
 }
 </code></pre>
 <p>具体情况根据实际情况来.</p>
+<h2 id="运维">运维</h2>
+<p>由于拆分的服务比较多, 线上bug定位复杂问题随之而来, 那就需要收集log, 而且多个服务之间的log要能连起来, 可追踪, 最简单的方法就是ELK三件套. 每个服务log格式加上追踪的ID. e.g:</p>
+<pre><code>log4j.logging.format=%d{yyyy-MM-dd HH:mm:ss.SSS} - [%X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}, %X{X-B3-ParentSpanId:-}, %X{X-Span-Export:-}, ${PID:-}] [%thread] %ex %-5level %logger [line: %line] -- %msg%n
+</code></pre>
+<p>这样查bug的时候, 只要服务写了log, 那在<a href="https://www.elastic.co/products/kibana">kibana</a>里面查询跟踪起来还是很快的.</p>
 <blockquote>
 <p>各种架构服务流行的今天, 不管是框架也好架构也罢, 选择适合自己的才是最好的.</p>
 </blockquote>
