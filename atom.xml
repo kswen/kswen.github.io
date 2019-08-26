@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kswen.github.io</id>
     <title>a little bit</title>
-    <updated>2019-08-26T05:21:49.207Z</updated>
+    <updated>2019-08-26T05:22:50.136Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kswen.github.io"/>
     <link rel="self" href="https://kswen.github.io/atom.xml"/>
@@ -10,6 +10,17 @@
     <logo>https://kswen.github.io/images/avatar.png</logo>
     <icon>https://kswen.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, a little bit</rights>
+    <entry>
+        <title type="html"><![CDATA[使用Kong创建服务4步曲]]></title>
+        <id>https://kswen.github.io/post/create-service-with-kong</id>
+        <link href="https://kswen.github.io/post/create-service-with-kong">
+        </link>
+        <updated>2019-08-26T05:11:35.000Z</updated>
+        <summary type="html"><![CDATA[<p>Kong的安装步骤请参考官方文档, 没有任何文档有官方的权威, 很多同学会去百度, 然后打开搜索结果的前10项, 最后发现他们都是从一个地方Copy过来的, 关键最后发现还是一篇错误的文章, 时间很重要, 不能浪费时间, 且看且珍惜⌚. 安装完Kong服务, 只需4步即可创建一个可以用服务路由. 通过Kong提供的Admin API, 可以很简单的对服务&quot;对象&quot;做增删查改的操作.</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Kong的安装步骤请参考官方文档, 没有任何文档有官方的权威, 很多同学会去百度, 然后打开搜索结果的前10项, 最后发现他们都是从一个地方Copy过来的, 关键最后发现还是一篇错误的文章, 时间很重要, 不能浪费时间, 且看且珍惜⌚. 安装完Kong服务, 只需4步即可创建一个可以用服务路由. 通过Kong提供的Admin API, 可以很简单的对服务&quot;对象&quot;做增删查改的操作.</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[介于传统巨石服务与微服务之间的一种选择]]></title>
         <id>https://kswen.github.io/post/the-choice-between-monolith-and-microservices</id>
