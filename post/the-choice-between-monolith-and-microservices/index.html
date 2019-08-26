@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566735861357">
+<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566788033473">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kswen.github.io">
-        <img src="https://kswen.github.io/images/avatar.png?v=1566735861357" class="site-logo">
+        <img src="https://kswen.github.io/images/avatar.png?v=1566788033473" class="site-logo">
         <h1 class="site-title">a little bit</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -117,6 +117,22 @@
 <li>请求路由映射: /user/get</li>
 <li>参数: id=user001</li>
 </ul>
+<p>我们要获取的用户信息包括以下几块:</p>
+<ul>
+<li>用户基本信息(姓名, 电话, 地址.....)</li>
+<li>银行账户信息(信用卡信息, 储蓄卡信息, 借贷信息..)</li>
+<li>用户开通业务信息</li>
+<li>最近交易信息</li>
+<li>用户账户审计信息</li>
+<li>.....还有其他信息</li>
+</ul>
+<p>我们之前的做法是通过在同一个实例里面的一个入口方法请求不同的其他模块方法,  然后聚合返回前端所需要的数据. 不管怎么分包, 其实还是在同一个JVM实例里面运行.</p>
+<p>现在做法是根据功能模块拆分成多个服务, 比如用户基本信息是一个单独的REST服务(单独可以运行的jar), 交易信息又是另外一个...</p>
+<p>这里入口服务为mars, 那mars里面的一个入口方法会请求不同的服务REST接口(多次网络请求, 这里面又可以有多种玩法), 或许你会担心响应速度问题, 实际测试发现是有影响的, 但是这点影响对于人类感知来说基本可以忽略不计.</p>
+<p>一个实例的服务以REST API的方式在多个服务之间共享, 但是实际并没有服务注册中心, 那么当部署多个服务实例的时候或者服务发布的时候怎么去保证服务的可用? 这个问题可以在<a href="https://konghq.com/">Kong</a>这个报网关里很好的解决. 关于Kong的介绍这里就不啰嗦, 官方文档很完美, 直接去官网看.  如果你使用或了解过Nginx, 看看这个图就明白了.<br>
+<img src="https://kswen.github.io/post-images/1566787847453.png" alt=""></p>
+<h2 id="实际行动">实际行动</h2>
+<p>说归说, 实际还得行动起来才知道行不行. 下面从0开始以我们实际情况来做个demo.</p>
 <blockquote>
 <p>各种架构服务流行的今天, 不管是框架也好架构也罢, 选择适合自己的才是最好的.</p>
 </blockquote>
