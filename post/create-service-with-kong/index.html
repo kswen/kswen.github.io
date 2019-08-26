@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566796935436">
+<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566799131584">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kswen.github.io">
-        <img src="https://kswen.github.io/images/avatar.png?v=1566796935436" class="site-logo">
+        <img src="https://kswen.github.io/images/avatar.png?v=1566799131584" class="site-logo">
         <h1 class="site-title">a little bit</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -101,6 +101,48 @@
             <div class="post-content">
               <p>Kong的安装步骤请参考官方文档, 没有任何文档有官方的权威, 很多同学会去百度, 然后打开搜索结果的前10项, 最后发现他们都是从一个地方Copy过来的, 关键最后发现还是一篇错误的文章, 时间很重要, 不能浪费时间, 且看且珍惜⌚. 安装完Kong服务, 只需4步即可创建一个可以用服务路由. 通过Kong提供的Admin API, 可以很简单的对服务&quot;对象&quot;做增删查改的操作.</p>
 <!-- more -->
+<h2 id="第一步-创建upstream">第一步, 创建upstream</h2>
+<pre><code>curl -X POST http://kong:8001/upstreams \
+        --data &quot;name=mars.v1.upstreams&quot; \
+	--data &quot;healthchecks.active.timeout=3&quot; \
+	--data &quot;healthchecks.active.concurrency=1&quot; \
+	--data &quot;healthchecks.active.http_path=/mars/actuator/health&quot; \
+	--data &quot;healthchecks.active.healthy.interval=3&quot; \
+	--data &quot;healthchecks.active.healthy.successes=1&quot; \
+	--data &quot;healthchecks.active.unhealthy.interval=3&quot; \
+	--data &quot;healthchecks.active.unhealthy.timeouts=30&quot; \
+	--data &quot;healthchecks.active.unhealthy.http_failures=30&quot; \
+	--data &quot;healthchecks.passive.healthy.successes=1&quot; \
+	--data &quot;healthchecks.passive.unhealthy.timeouts=10&quot; \
+	--data &quot;healthchecks.passive.unhealthy.http_failures=3&quot;
+</code></pre>
+<p>这里我们创建了一个名为<strong>mars.v1.upstreams</strong>的upstream, 关键点是服务健康检查入口, 其他的具体每项值可参考Kong文档.</p>
+<h2 id="第二步-创建upstream下的target">第二步, 创建upstream下的target</h2>
+<pre><code>curl -X POST http://kong:8001/upstreams/mars.v1.upstreams/targets \
+    --data &quot;target=192.168.0.10:10000&quot; \
+    --data &quot;weight=100&quot;
+		
+curl -X POST http://kong:8001/upstreams/mars.v1.upstreams/targets \
+    --data &quot;target=192.168.0.10:10001&quot; \
+    --data &quot;weight=100&quot;
+</code></pre>
+<p>这里我们在<strong>mars.v1.upstreams</strong>下在同一台主机上创建了2个服务实例, 运行在不同端口, 不同主机上部署实例的话端口就可以一样了.</p>
+<h2 id="第三步-创建service">第三步, 创建service</h2>
+<pre><code>curl -X POST http://kong:8001/services/ \
+    --data &quot;name=mars-service&quot; \
+    --data &quot;host=mars.v1.upstreams&quot; \
+    --data &quot;path=/mars&quot;
+</code></pre>
+<p>这里我们创建了名为<strong>mars-service</strong>的服务, host指向第一步创建的upstream.</p>
+<h2 id="第四步-创建路由routes切入点">第四步, 创建路由(routes)切入点</h2>
+<pre><code>curl -X POST http://kong:8001/services/mars-service/routes/ \
+	--data &quot;hosts[]=api.demo.com&quot; \
+	--data &quot;paths[]=/mars&quot;
+</code></pre>
+<p>这里创建了一个请求路由规则并挂在服务<strong>mars-service</strong>下, 得到可用的服务请求入口为: https://api.demo.com/mars</p>
+<h2 id="各对象之间的关系">各对象之间的关系</h2>
+<p><img src="https://kswen.github.io/post-images/1566799079957.png" alt="Kong对象之间的关系"><br>
+通过这图可以清楚看到Kong里面各对象之间的关系.</p>
 
             </div>
             
