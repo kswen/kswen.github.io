@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566794538948">
+<link rel="shortcut icon" href="https://kswen.github.io/favicon.ico?v=1566796631262">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
@@ -30,7 +30,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://kswen.github.io">
-        <img src="https://kswen.github.io/images/avatar.png?v=1566794538948" class="site-logo">
+        <img src="https://kswen.github.io/images/avatar.png?v=1566796631262" class="site-logo">
         <h1 class="site-title">a little bit</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -425,6 +425,19 @@ def e2eStatus(nodeName, nodePort, serviceName){
 <pre><code>log4j.logging.format=%d{yyyy-MM-dd HH:mm:ss.SSS} - [%X{X-B3-TraceId:-}, %X{X-B3-SpanId:-}, %X{X-B3-ParentSpanId:-}, %X{X-Span-Export:-}, ${PID:-}] [%thread] %ex %-5level %logger [line: %line] -- %msg%n
 </code></pre>
 <p>这样查bug的时候, 只要服务写了log, 那在<a href="https://www.elastic.co/products/kibana">kibana</a>里面查询跟踪起来还是很快的.</p>
+<h2 id="总结关键点">总结关键点</h2>
+<ul>
+<li>
+<p>使用Springboot给开发人员带来的便利性, just need make a simple jar, that`s it, no more complexity.</p>
+</li>
+<li>
+<p>充分利用Kong网关提供的功能, 丰富的插件, 服务健康检查, 断路器.</p>
+</li>
+<li>
+<p>尽量编写自动化的构建和测试脚本, Jenkinsfile</p>
+</li>
+</ul>
+<p>这里也只是抛砖引玉简单描述了一下目前使用到的一些框架模式, 具体有什么不明白的都可以问我, 微信: rssbar, 用于杂事多, 不一定能马上回复.</p>
 <blockquote>
 <p>各种架构服务流行的今天, 不管是框架也好架构也罢, 选择适合自己的才是最好的.</p>
 </blockquote>
