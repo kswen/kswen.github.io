@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>passion | a little bit</title>
+<title>看到NEURALINK我又看了一遍&lt;&lt;源代码&gt;&gt; | a little bit</title>
 <meta name="description" content="我思故我在">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -13,6 +13,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -91,34 +97,37 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: passion</h2>
-          
-            <article class="post-item">
-              <div class="left">
+          <div class="post-detail">
+            <h2 class="post-title">看到NEURALINK我又看了一遍&lt;&lt;源代码&gt;&gt;</h2>
+            <div class="post-date">2019-09-05</div>
+            
+            <div class="post-content">
+              <p>前段时间Elon Musk发布了关于脑机接口研究项目: <strong>NEURALINK</strong>. 大家如果能连上正宗的互联网的话可以看看原视频:<br>
+<a href="https://www.youtube.com/watch?v=r-vbh3t7WVI">Neuralink Launch Event</a>. 官方网站: <a href="https://www.neuralink.com">NEURALINK</a>. 就像Elon说的, 此次发布会的主要目的是向全球招募人才, NEURALINK项目涉及到的范围很广, 你如果觉得能发挥你的聪明才智不妨投个简历试试.😍</p>
+<!-- more -->
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
                 <a href="https://kswen.github.io/post/the-views-of-430-am">
-                  <h2 class="post-title">The views of 4:30 AM</h2>
+                  <h3 class="post-title">
+                    The views of 4:30 AM
+                  </h3>
                 </a>
-                <div class="post-date">
-                  2019-08-27
-                </div>
-                <div class="post-abstract">
-                  <p>Waking Up at 4:30 AM, Are you kidding me? Oh... No~~ Then, Are you going to be watching the sunrise??? Uhmmm... Not really, but you could say I'm going to watching my future rise up. Most people want to see something different, and waking up so early is definitely an abnormal thing, but if you don't do these kinds of abnormal things how can you possibly to see something different? If you want to change something in your shit life, you gotta do it consistently. Don't worry it won't make you weak or tired on the whole day. In my case, this routing makes me stronger and got more time to use.</p>
-
-                </div>
               </div>
-              
-                <a class="right" href="https://kswen.github.io/post/the-views-of-430-am">
-                  <div class="feature-container" style="background-image: url('https://kswen.github.io/post-images/the-views-of-430-am.jpg')">
-                  </div>
-                </a>
-              
-            </article>
-          
+            
 
-          <div class="pagination-container">
-  
-  
-</div>
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
 
         </div>
       </div>
@@ -140,6 +149,29 @@ var app = new Vue({
 })
 
 </script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'dd83521c2ebf5816a7ab',
+        clientSecret: 'd5ac3312e61ec22c616fb10f09c2694d2cb6bd11',
+        repo: 'kswen.github.io',
+        owner: 'kswen',
+        admin: ['kswen'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 

@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kswen.github.io</id>
     <title>a little bit</title>
-    <updated>2019-09-05T02:28:34.855Z</updated>
+    <updated>2019-09-05T02:41:12.441Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kswen.github.io"/>
     <link rel="self" href="https://kswen.github.io/atom.xml"/>
@@ -10,6 +10,19 @@
     <logo>https://kswen.github.io/images/avatar.png</logo>
     <icon>https://kswen.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, a little bit</rights>
+    <entry>
+        <title type="html"><![CDATA[看到NEURALINK我又看了一遍<<源代码>>]]></title>
+        <id>https://kswen.github.io/post/neuralink-news-recall-me-a-movie</id>
+        <link href="https://kswen.github.io/post/neuralink-news-recall-me-a-movie">
+        </link>
+        <updated>2019-09-05T02:21:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>前段时间Elon Musk发布了关于脑机接口研究项目: <strong>NEURALINK</strong>. 大家如果能连上正宗的互联网的话可以看看原视频:<br>
+<a href="https://www.youtube.com/watch?v=r-vbh3t7WVI">Neuralink Launch Event</a>. 官方网站: <a href="https://www.neuralink.com">NEURALINK</a>. 就像Elon说的, 此次发布会的主要目的是向全球招募人才, NEURALINK项目涉及到的范围很广, 你如果觉得能发挥你的聪明才智不妨投个简历试试.😍</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>前段时间Elon Musk发布了关于脑机接口研究项目: <strong>NEURALINK</strong>. 大家如果能连上正宗的互联网的话可以看看原视频:<br>
+<a href="https://www.youtube.com/watch?v=r-vbh3t7WVI">Neuralink Launch Event</a>. 官方网站: <a href="https://www.neuralink.com">NEURALINK</a>. 就像Elon说的, 此次发布会的主要目的是向全球招募人才, NEURALINK项目涉及到的范围很广, 你如果觉得能发挥你的聪明才智不妨投个简历试试.😍</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[The views of 4:30 AM]]></title>
         <id>https://kswen.github.io/post/the-views-of-430-am</id>
