@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>健身 | a little bit</title>
+<title>程序员转行做&#34;无忧街&#34; | a little bit</title>
 <meta name="description" content="我思故我在">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -13,6 +13,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://kswen.github.io/styles/main.css">
 
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
 
 
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -91,55 +97,54 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <h2 class="current-tag">标签: 健身</h2>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://kswen.github.io/post/the-views-of-430-am">
-                  <h2 class="post-title">The views of 4:30 AM</h2>
-                </a>
-                <div class="post-date">
-                  2019-08-27
-                </div>
-                <div class="post-abstract">
-                  <p>Waking Up at 4:30 AM, Are you kidding me? Oh... No~~ Then, Are you going to be watching the sunrise??? Uhmmm... Not really, but you could say I'm going to watching my future rise up. Most people want to see something different, and waking up so early is definitely an abnormal thing, but if you don't do these kinds of abnormal things how can you possibly to see something different? If you want to change something in your shit life, you gotta do it consistently. Don't worry it won't make you weak or tired on the whole day. In my case, this routing makes me stronger and got more time to use.</p>
-
-                </div>
+          <div class="post-detail">
+            <h2 class="post-title">程序员转行做&#34;无忧街&#34;</h2>
+            <div class="post-date">2019-12-10</div>
+            
+              <div class="feature-container" style="background-image: url('https://kswen.github.io/post-images/cheng-xu-yuan-zhuan-xing-zuo-wu-you-jie.png')">
               </div>
-              
-                <a class="right" href="https://kswen.github.io/post/the-views-of-430-am">
-                  <div class="feature-container" style="background-image: url('https://kswen.github.io/post-images/the-views-of-430-am.jpg')">
-                  </div>
-                </a>
-              
-            </article>
-          
-            <article class="post-item">
-              <div class="left">
-                <a href="https://kswen.github.io/post/you-looks-exhausted">
-                  <h2 class="post-title">oh, No~ 你看起来很没有精神哦😎</h2>
-                </a>
-                <div class="post-date">
-                  2019-08-24
-                </div>
-                <div class="post-abstract">
-                  <p>&quot;<strong>你今天看起来没精神, 最近没休息好?</strong>&quot; 身边的朋友或同事见我第一句冒出来的话(根据概率推测, 没说出来的估计心理也这么想过). <strong>What???</strong> 我问我自己, 我精神不好吗, 有吗? 没有吗? 我感觉挺好的啊🤑......</p>
+            
+            <div class="post-content">
+              <p>嗯~, 准备开写了, 文笔很重要, 我或许需要先酝酿一下....</p>
 
-                </div>
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://kswen.github.io/tag/R-WRA2cgA" class="tag">
+                    程序猿
+                  </a>
+                
+                  <a href="https://kswen.github.io/tag/dxk2yzA53p" class="tag">
+                    无忧街
+                  </a>
+                
+                  <a href="https://kswen.github.io/tag/6jzWvySn1p" class="tag">
+                    网购2.0
+                  </a>
+                
               </div>
-              
-                <a class="right" href="https://kswen.github.io/post/you-looks-exhausted">
-                  <div class="feature-container" style="background-image: url('https://kswen.github.io/post-images/you-looks-exhausted.png')">
-                  </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://kswen.github.io/post/neuralink-news-recall-me-a-movie">
+                  <h3 class="post-title">
+                    看到NEURALINK我又看了一遍&lt;&lt;源代码&gt;&gt;
+                  </h3>
                 </a>
-              
-            </article>
-          
+              </div>
+            
 
-          <div class="pagination-container">
-  
-  
-</div>
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
 
         </div>
       </div>
@@ -161,6 +166,29 @@ var app = new Vue({
 })
 
 </script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'dd83521c2ebf5816a7ab',
+        clientSecret: 'd5ac3312e61ec22c616fb10f09c2694d2cb6bd11',
+        repo: 'kswen.github.io',
+        owner: 'kswen',
+        admin: ['kswen'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
 
 
 
