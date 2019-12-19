@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://kswen.github.io</id>
     <title>a little bit</title>
-    <updated>2019-12-17T10:08:54.932Z</updated>
+    <updated>2019-12-19T05:33:21.023Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://kswen.github.io"/>
     <link rel="self" href="https://kswen.github.io/atom.xml"/>
@@ -10,6 +10,13 @@
     <logo>https://kswen.github.io/images/avatar.png</logo>
     <icon>https://kswen.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, a little bit</rights>
+    <entry>
+        <title type="html"><![CDATA[程序猿入门网购行业，很多东西还是去实践后才会明白]]></title>
+        <id>https://kswen.github.io/post/online-shopping</id>
+        <link href="https://kswen.github.io/post/online-shopping">
+        </link>
+        <updated>2019-12-19T03:58:23.000Z</updated>
+    </entry>
     <entry>
         <title type="html"><![CDATA[程序猿转行，干了2个月销售，经验总结分享]]></title>
         <id>https://kswen.github.io/post/cxy-10-year</id>
